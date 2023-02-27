@@ -1,43 +1,21 @@
 package com.payments_company.transactionsmanagement.services;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.payments_company.transactionsmanagement.dtos.DepositCreateDto;
+import com.payments_company.transactionsmanagement.dtos.user.UserCreateDto;
 import com.payments_company.transactionsmanagement.models.User;
-import com.payments_company.transactionsmanagement.repositories.UserRepository;
 
-@Service
-public class UserServices implements IUserServices {
+public interface UserServices {
 
-  @Autowired
-  private UserRepository userRepository;
+  User createUser(UserCreateDto userCreateDto);
 
-  @Override
-  public User createUser(User user) {
-    return userRepository.save(user);
-  }
+  User createDeposit(Long id, DepositCreateDto deposit);
 
-  @Override
-  public User updateUser(User user) {
-    return userRepository.save(user);
-  }
+  List<User> readAllUsers();
 
-  @Override
-  public List<User> readAllUsers() {
-    return userRepository.findAll();
-  }
+  User retrieveUser(Long id);
 
-  @Override
-  public Optional<User> retrieveUser(Long id) {
-    return userRepository.findById(id);
-  }
-
-  @Override
-  public void deleteUser(Long id) {
-    userRepository.deleteById(id);
-  }
+  void deleteUser(Long id);
 
 }

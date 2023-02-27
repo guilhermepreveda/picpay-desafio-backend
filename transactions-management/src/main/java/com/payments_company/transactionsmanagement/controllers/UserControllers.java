@@ -1,22 +1,22 @@
 package com.payments_company.transactionsmanagement.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.payments_company.transactionsmanagement.dtos.DepositCreateDto;
+import com.payments_company.transactionsmanagement.dtos.user.UserCreateDto;
 import com.payments_company.transactionsmanagement.models.User;
-import com.payments_company.transactionsmanagement.services.UserServices;
+import com.payments_company.transactionsmanagement.services.impl.UserServicesImpl;
 
 import jakarta.validation.Valid;
 
@@ -25,33 +25,42 @@ import jakarta.validation.Valid;
 public class UserControllers {
 
   @Autowired
-  UserServices userServices;
+  UserServicesImpl userServices;
 
   @PostMapping
-  public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-    User createdUser = userServices.createUser(user);
+  public ResponseEntity<User> createUser(@Valid @RequestBody UserCreateDto userCreateDto) {
+
+    User createdUser = userServices.createUser(userCreateDto);
 
     return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
   }
 
-  @PatchMapping
-  public User updateUser(@Valid @RequestBody User user) {
-    return userServices.updateUser(user);
+  @PostMapping("/{id}/deposit")
+  public ResponseEntity<User> createUser(@PathVariable("id") Long id, @Valid @RequestBody DepositCreateDto deposit) {
+    User depositedUser = userServices.createDeposit(id, deposit);
+
+    return new ResponseEntity<User>(depositedUser, HttpStatus.OK);
   }
 
   @GetMapping
-  public List<User> readAllUsers() {
-    return userServices.readAllUsers();
+  public ResponseEntity<List<User>> readAllUsers() {
+    List<User> allUsers = userServices.readAllUsers();
+
+    return new ResponseEntity<List<User>>(allUsers, HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public Optional<User> retrieveUser(@PathVariable("id") Long id) {
-    return userServices.retrieveUser(id);
+  public ResponseEntity<User> retrieveUser(@PathVariable("id") Long id) {
+    User foundUser = userServices.retrieveUser(id);
+
+    return new ResponseEntity<User>(foundUser, HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
-  public void deleteUser(@PathVariable("id") Long id) {
+  public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
     userServices.deleteUser(id);
+
+    return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
   }
 
 }
