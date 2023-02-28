@@ -14,12 +14,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "transactions")
 @Data
+@NoArgsConstructor
 @RequiredArgsConstructor
 public class Transaction {
 
@@ -27,12 +29,12 @@ public class Transaction {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(nullable = false, updatable = false, referencedColumnName = "id")
   @NonNull
   private User payer;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(nullable = false, updatable = false, referencedColumnName = "id")
   @NonNull
   private User payee;

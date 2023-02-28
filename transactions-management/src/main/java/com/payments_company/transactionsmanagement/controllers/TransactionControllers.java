@@ -1,7 +1,5 @@
 package com.payments_company.transactionsmanagement.controllers;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +33,10 @@ public class TransactionControllers {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Optional<Transaction>> retrieveUser(@PathVariable("id") Long id) {
-    Optional<Transaction> foundTransaction = transactionServices.retrieveTransaction(id);
+  public ResponseEntity<Transaction> retrieveUser(@PathVariable("id") Long id) {
+    Transaction foundTransaction = transactionServices.retrieveTransaction(id);
 
-    return new ResponseEntity<Optional<Transaction>>(foundTransaction, HttpStatus.OK);
+    return new ResponseEntity<Transaction>(foundTransaction, HttpStatus.OK);
   }
 
 }

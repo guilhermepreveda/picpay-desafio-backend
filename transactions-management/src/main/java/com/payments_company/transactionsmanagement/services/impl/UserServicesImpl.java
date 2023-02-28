@@ -1,7 +1,6 @@
 package com.payments_company.transactionsmanagement.services.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.payments_company.transactionsmanagement.dtos.DepositCreateDto;
 import com.payments_company.transactionsmanagement.dtos.user.UserCreateDto;
 import com.payments_company.transactionsmanagement.exceptions.EmailAlreadyInUseException;
+import com.payments_company.transactionsmanagement.exceptions.UserNotFoundException;
 import com.payments_company.transactionsmanagement.models.User;
 import com.payments_company.transactionsmanagement.repositories.UserRepository;
 import com.payments_company.transactionsmanagement.services.UserServices;
@@ -26,11 +26,13 @@ public class UserServicesImpl implements UserServices {
   @Override
   public User createUser(UserCreateDto userCreateDto) {
 
-    if (userRepository.findByEmail(userCreateDto.getEmail()) != null) {
-      throw new EmailAlreadyInUseException("Invalid email address: Email is already in use");
+    boolean userExists = userRepository.findByEmail(userCreateDto.getEmail()) != null;
+
+    if (userExists) {
+      throw new EmailAlreadyInUseException();
     }
 
-    User user = new User();
+    final User user = new User();
 
     user.setName(userCreateDto.getName());
     user.setCpf(userCreateDto.getCpf());
@@ -46,13 +48,13 @@ public class UserServicesImpl implements UserServices {
 
   @Override
   public User createDeposit(Long id, DepositCreateDto depositCreateDto) {
-    Optional<User> foundUser = userRepository.findById(id);
+    User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
 
-    float userOldBalance = foundUser.get().getBalance();
+    float userOldBalance = foundUser.getBalance();
 
-    foundUser.get().setBalance(userOldBalance + depositCreateDto.getValue());
+    foundUser.setBalance(userOldBalance + depositCreateDto.getValue());
 
-    return userRepository.save(foundUser.get());
+    return userRepository.save(foundUser);
   }
 
   @Override
@@ -63,12 +65,14 @@ public class UserServicesImpl implements UserServices {
   @Override
   public User retrieveUser(Long id) {
     return userRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Invalid user id: User not found"));
+        .orElseThrow(() -> new UserNotFoundException());
   }
 
   @Override
   public void deleteUser(Long id) {
-    userRepository.deleteById(id);
+    User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+
+    userRepository.delete(foundUser);
   }
 
 }
