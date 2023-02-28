@@ -8,4 +8,6 @@ import com.payments_company.transactionsmanagement.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+  User findByEmail(String email);
+
 }

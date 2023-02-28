@@ -10,7 +10,7 @@ public interface UserServices {
 
   User createUser(UserCreateDto userCreateDto);
 
-  User createDeposit(Long id, DepositCreateDto deposit);
+  User createDeposit(Long id, DepositCreateDto depositCreateDto);
 
   List<User> readAllUsers();
 

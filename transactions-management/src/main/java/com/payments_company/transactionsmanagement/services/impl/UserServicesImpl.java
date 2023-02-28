@@ -3,12 +3,13 @@ package com.payments_company.transactionsmanagement.services.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.payments_company.transactionsmanagement.dtos.DepositCreateDto;
 import com.payments_company.transactionsmanagement.dtos.user.UserCreateDto;
+import com.payments_company.transactionsmanagement.exceptions.EmailAlreadyInUseException;
 import com.payments_company.transactionsmanagement.models.User;
 import com.payments_company.transactionsmanagement.repositories.UserRepository;
 import com.payments_company.transactionsmanagement.services.UserServices;
@@ -20,22 +21,36 @@ public class UserServicesImpl implements UserServices {
   private UserRepository userRepository;
 
   @Autowired
-  private ModelMapper modelMapper;
+  private PasswordEncoder passwordEncoder;
 
   @Override
   public User createUser(UserCreateDto userCreateDto) {
-    User postRequest = modelMapper.map(userCreateDto, User.class);
 
-    return userRepository.save(postRequest);
+    if (userRepository.findByEmail(userCreateDto.getEmail()) != null) {
+      throw new EmailAlreadyInUseException("Invalid email address: Email is already in use");
+    }
+
+    User user = new User();
+
+    user.setName(userCreateDto.getName());
+    user.setCpf(userCreateDto.getCpf());
+    user.setCpf(userCreateDto.getCpf());
+    user.setEmail(userCreateDto.getEmail());
+
+    user.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
+
+    user.setType(userCreateDto.getType());
+
+    return userRepository.save(user);
   }
 
   @Override
-  public User createDeposit(Long id, DepositCreateDto deposit) {
+  public User createDeposit(Long id, DepositCreateDto depositCreateDto) {
     Optional<User> foundUser = userRepository.findById(id);
 
     float userOldBalance = foundUser.get().getBalance();
 
-    foundUser.get().setBalance(userOldBalance + deposit.getValue());
+    foundUser.get().setBalance(userOldBalance + depositCreateDto.getValue());
 
     return userRepository.save(foundUser.get());
   }

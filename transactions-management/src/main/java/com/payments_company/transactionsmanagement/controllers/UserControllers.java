@@ -36,8 +36,9 @@ public class UserControllers {
   }
 
   @PostMapping("/{id}/deposit")
-  public ResponseEntity<User> createUser(@PathVariable("id") Long id, @Valid @RequestBody DepositCreateDto deposit) {
-    User depositedUser = userServices.createDeposit(id, deposit);
+  public ResponseEntity<User> createUser(@PathVariable("id") Long id,
+      @Valid @RequestBody DepositCreateDto depositCreateDto) {
+    User depositedUser = userServices.createDeposit(id, depositCreateDto);
 
     return new ResponseEntity<User>(depositedUser, HttpStatus.OK);
   }
