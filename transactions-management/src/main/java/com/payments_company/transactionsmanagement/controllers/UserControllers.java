@@ -7,14 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.payments_company.transactionsmanagement.dtos.DepositCreateDto;
-import com.payments_company.transactionsmanagement.dtos.user.UserCreateDto;
+import com.payments_company.transactionsmanagement.dtos.DepositDto;
+import com.payments_company.transactionsmanagement.dtos.UserDto;
 import com.payments_company.transactionsmanagement.models.User;
 import com.payments_company.transactionsmanagement.services.impl.UserServicesImpl;
 
@@ -28,17 +29,25 @@ public class UserControllers {
   UserServicesImpl userServices;
 
   @PostMapping
-  public ResponseEntity<User> createUser(@Valid @RequestBody UserCreateDto userCreateDto) {
+  public ResponseEntity<User> createUser(@Valid @RequestBody UserDto userDto) {
 
-    User createdUser = userServices.createUser(userCreateDto);
+    User createdUser = userServices.createUser(userDto);
 
     return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
   }
 
+  @PutMapping("/{id}")
+  public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
+      @Valid @RequestBody UserDto userDto) {
+    User updatedUser = userServices.updateUser(id, userDto);
+
+    return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
+  }
+
   @PostMapping("/{id}/deposit")
   public ResponseEntity<User> createUser(@PathVariable("id") Long id,
-      @Valid @RequestBody DepositCreateDto depositCreateDto) {
-    User depositedUser = userServices.createDeposit(id, depositCreateDto);
+      @Valid @RequestBody DepositDto depositDto) {
+    User depositedUser = userServices.createDeposit(id, depositDto);
 
     return new ResponseEntity<User>(depositedUser, HttpStatus.OK);
   }

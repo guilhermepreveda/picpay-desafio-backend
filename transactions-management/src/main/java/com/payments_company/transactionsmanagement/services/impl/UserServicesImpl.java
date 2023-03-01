@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.payments_company.transactionsmanagement.dtos.DepositCreateDto;
-import com.payments_company.transactionsmanagement.dtos.user.UserCreateDto;
+import com.payments_company.transactionsmanagement.dtos.DepositDto;
+import com.payments_company.transactionsmanagement.dtos.UserDto;
 import com.payments_company.transactionsmanagement.exceptions.EmailAlreadyInUseException;
 import com.payments_company.transactionsmanagement.exceptions.UserNotFoundException;
 import com.payments_company.transactionsmanagement.models.User;
@@ -24,9 +24,9 @@ public class UserServicesImpl implements UserServices {
   private PasswordEncoder passwordEncoder;
 
   @Override
-  public User createUser(UserCreateDto userCreateDto) {
+  public User createUser(UserDto userDto) {
 
-    boolean userExists = userRepository.findByEmail(userCreateDto.getEmail()) != null;
+    boolean userExists = userRepository.findByEmail(userDto.getEmail()) != null;
 
     if (userExists) {
       throw new EmailAlreadyInUseException();
@@ -34,25 +34,40 @@ public class UserServicesImpl implements UserServices {
 
     final User user = new User();
 
-    user.setName(userCreateDto.getName());
-    user.setCpf(userCreateDto.getCpf());
-    user.setCpf(userCreateDto.getCpf());
-    user.setEmail(userCreateDto.getEmail());
+    user.setName(userDto.getName());
+    user.setCpf(userDto.getCpf());
+    user.setEmail(userDto.getEmail());
 
-    user.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
+    user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-    user.setType(userCreateDto.getType());
+    user.setType(userDto.getType());
 
     return userRepository.save(user);
   }
 
   @Override
-  public User createDeposit(Long id, DepositCreateDto depositCreateDto) {
+  public User updateUser(Long id, UserDto userDto) {
+
+    User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+
+    foundUser.setName(userDto.getName());
+    foundUser.setCpf(userDto.getCpf());
+    foundUser.setEmail(userDto.getEmail());
+
+    foundUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
+    foundUser.setType(userDto.getType());
+
+    return userRepository.save(foundUser);
+  }
+
+  @Override
+  public User createDeposit(Long id, DepositDto depositDto) {
     User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
 
     float userOldBalance = foundUser.getBalance();
 
-    foundUser.setBalance(userOldBalance + depositCreateDto.getValue());
+    foundUser.setBalance(userOldBalance + depositDto.getValue());
 
     return userRepository.save(foundUser);
   }

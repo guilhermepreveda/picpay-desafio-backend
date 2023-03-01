@@ -1,11 +1,11 @@
 package com.payments_company.transactionsmanagement.services;
 
-import com.payments_company.transactionsmanagement.dtos.TransactionCreateDto;
+import com.payments_company.transactionsmanagement.dtos.TransactionDto;
 import com.payments_company.transactionsmanagement.models.Transaction;
 
 public interface TransactionServices {
 
-  Transaction createTransaction(TransactionCreateDto transactionCreateDto);
+  Transaction createTransaction(TransactionDto transactionDto);
 
   Transaction retrieveTransaction(Long id);
 

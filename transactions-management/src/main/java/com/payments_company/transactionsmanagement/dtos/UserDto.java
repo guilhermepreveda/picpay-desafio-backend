@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.dtos.user;
+package com.payments_company.transactionsmanagement.dtos;
 
 import com.payments_company.transactionsmanagement.enums.UserType;
 
@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Pattern.Flag;
 import lombok.Data;
 
 @Data
-public class UserCreateDto {
+public class UserDto {
 
   @NotNull(message = "Name is required")
   @NotBlank(message = "Name is empty")

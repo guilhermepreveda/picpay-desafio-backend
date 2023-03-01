@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.payments_company.transactionsmanagement.dtos.MessageResponseDto;
-import com.payments_company.transactionsmanagement.dtos.TransactionCreateDto;
+import com.payments_company.transactionsmanagement.dtos.TransactionDto;
 import com.payments_company.transactionsmanagement.enums.UserType;
 import com.payments_company.transactionsmanagement.exceptions.BalanceNotSufficientException;
 import com.payments_company.transactionsmanagement.exceptions.InvalidUserTypeException;
@@ -30,13 +30,13 @@ public class TransactionServicesImpl implements TransactionServices {
   private UserRepository userRepository;
 
   @Override
-  public Transaction createTransaction(TransactionCreateDto transactionCreateDto) {
-    float value = transactionCreateDto.getValue();
+  public Transaction createTransaction(TransactionDto transactionDto) {
+    float value = transactionDto.getValue();
 
-    Long payerId = transactionCreateDto.getPayer();
+    Long payerId = transactionDto.getPayer();
     User foundPayer = userRepository.findById(payerId).orElseThrow(() -> new PayerNotFoundException());
 
-    Long payeeId = transactionCreateDto.getPayee();
+    Long payeeId = transactionDto.getPayee();
     User foundPayee = userRepository.findById(payeeId).orElseThrow(() -> new PayeeNotFoundException());
 
     if (foundPayer.getType() == UserType.SELLER) {

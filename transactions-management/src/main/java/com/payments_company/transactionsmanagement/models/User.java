@@ -36,12 +36,10 @@ public class User {
 
   @Column(nullable = false)
   @JsonProperty(access = Access.WRITE_ONLY)
-
   private String password;
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-
   private UserType type;
 
   @Column(nullable = false)

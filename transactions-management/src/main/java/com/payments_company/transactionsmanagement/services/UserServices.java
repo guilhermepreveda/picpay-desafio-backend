@@ -2,15 +2,17 @@ package com.payments_company.transactionsmanagement.services;
 
 import java.util.List;
 
-import com.payments_company.transactionsmanagement.dtos.DepositCreateDto;
-import com.payments_company.transactionsmanagement.dtos.user.UserCreateDto;
+import com.payments_company.transactionsmanagement.dtos.DepositDto;
+import com.payments_company.transactionsmanagement.dtos.UserDto;
 import com.payments_company.transactionsmanagement.models.User;
 
 public interface UserServices {
 
-  User createUser(UserCreateDto userCreateDto);
+  User createUser(UserDto userCreateDto);
 
-  User createDeposit(Long id, DepositCreateDto depositCreateDto);
+  User updateUser(Long id, UserDto userDto);
+
+  User createDeposit(Long id, DepositDto depositDto);
 
   List<User> readAllUsers();
 

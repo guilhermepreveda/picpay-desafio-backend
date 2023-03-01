@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.payments_company.transactionsmanagement.dtos.TransactionCreateDto;
+import com.payments_company.transactionsmanagement.dtos.TransactionDto;
 import com.payments_company.transactionsmanagement.models.Transaction;
 import com.payments_company.transactionsmanagement.services.TransactionServices;
 
@@ -24,9 +24,9 @@ public class TransactionControllers {
   TransactionServices transactionServices;
 
   @PostMapping
-  public ResponseEntity<Transaction> createUser(@Valid @RequestBody TransactionCreateDto transaction) {
+  public ResponseEntity<Transaction> createUser(@Valid @RequestBody TransactionDto transactionDto) {
 
-    Transaction createdTransaction = transactionServices.createTransaction(transaction);
+    Transaction createdTransaction = transactionServices.createTransaction(transactionDto);
 
     return new ResponseEntity<Transaction>(createdTransaction, HttpStatus.CREATED);
 
