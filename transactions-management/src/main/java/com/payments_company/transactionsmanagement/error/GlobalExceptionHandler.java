@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.payments_company.transactionsmanagement.exceptions.BalanceNotSufficientException;
+import com.payments_company.transactionsmanagement.exceptions.CpfAlreadyInUseException;
 import com.payments_company.transactionsmanagement.exceptions.EmailAlreadyInUseException;
 import com.payments_company.transactionsmanagement.exceptions.InvalidUserTypeException;
 import com.payments_company.transactionsmanagement.exceptions.PayeeNotFoundException;
@@ -39,7 +41,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       BindException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     final BindingResult result = ex.getBindingResult();
     final GenericResponse bodyOfResponse = new GenericResponse(result.getAllErrors(),
-        "Invalid" + result.getObjectName());
+        "Invalid" + StringUtils.capitalize(result.getObjectName()));
+
     return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
@@ -48,7 +51,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     final BindingResult result = ex.getBindingResult();
     final GenericResponse bodyOfResponse = new GenericResponse(result.getAllErrors(),
-        "Invalid" + result.getObjectName());
+        "Invalid" + StringUtils.capitalize(result.getObjectName()));
     return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
@@ -109,9 +112,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler({ EmailAlreadyInUseException.class })
-  public ResponseEntity<Object> handleUserAlreadyExist(final RuntimeException ex, final WebRequest request) {
+  public ResponseEntity<Object> handleEmailAlreadyInUseException(final RuntimeException ex, final WebRequest request) {
     final GenericResponse bodyOfResponse = new GenericResponse(
-        messages.getMessage("message.regError", null, request.getLocale()), "EmailAlreadyInUse");
+        messages.getMessage("message.emailAlreadyInUseException", null, request.getLocale()), "EmailAlreadyInUse");
+    return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
+  }
+
+  @ExceptionHandler({ CpfAlreadyInUseException.class })
+  public ResponseEntity<Object> handleCpfAlreadyInUse(final RuntimeException ex, final WebRequest request) {
+    final GenericResponse bodyOfResponse = new GenericResponse(
+        messages.getMessage("message.cpfAlreadyInUseException", null, request.getLocale()), "CpfAlreadyInUse");
     return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
   }
 

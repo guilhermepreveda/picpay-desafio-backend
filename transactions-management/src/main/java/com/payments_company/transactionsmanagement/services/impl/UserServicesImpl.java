@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.payments_company.transactionsmanagement.dtos.DepositDto;
 import com.payments_company.transactionsmanagement.dtos.UserDto;
+import com.payments_company.transactionsmanagement.enums.UserType;
+import com.payments_company.transactionsmanagement.exceptions.CpfAlreadyInUseException;
 import com.payments_company.transactionsmanagement.exceptions.EmailAlreadyInUseException;
 import com.payments_company.transactionsmanagement.exceptions.UserNotFoundException;
 import com.payments_company.transactionsmanagement.models.User;
@@ -26,10 +28,14 @@ public class UserServicesImpl implements UserServices {
   @Override
   public User createUser(UserDto userDto) {
 
-    boolean userExists = userRepository.findByEmail(userDto.getEmail()) != null;
-
-    if (userExists) {
+    boolean emailInUse = userRepository.findByEmail(userDto.getEmail()) != null;
+    if (emailInUse) {
       throw new EmailAlreadyInUseException();
+    }
+
+    boolean cpfInUse = userRepository.findByCpf(userDto.getCpf()) != null;
+    if (cpfInUse) {
+      throw new CpfAlreadyInUseException();
     }
 
     final User user = new User();
@@ -40,7 +46,7 @@ public class UserServicesImpl implements UserServices {
 
     user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-    user.setType(userDto.getType());
+    user.setType(UserType.valueOf(userDto.getType()));
 
     return userRepository.save(user);
   }
@@ -51,12 +57,22 @@ public class UserServicesImpl implements UserServices {
     User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
 
     foundUser.setName(userDto.getName());
+
+    boolean cpfInUse = userRepository.findByCpf(userDto.getCpf()) != null;
+    if (cpfInUse) {
+      throw new CpfAlreadyInUseException();
+    }
     foundUser.setCpf(userDto.getCpf());
+
+    boolean emailInUse = userRepository.findByEmail(userDto.getEmail()) != null;
+    if (emailInUse) {
+      throw new EmailAlreadyInUseException();
+    }
     foundUser.setEmail(userDto.getEmail());
 
     foundUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-    foundUser.setType(userDto.getType());
+    foundUser.setType(UserType.valueOf(userDto.getType()));
 
     return userRepository.save(foundUser);
   }

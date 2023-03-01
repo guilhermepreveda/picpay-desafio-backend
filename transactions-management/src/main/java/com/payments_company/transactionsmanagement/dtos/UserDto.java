@@ -1,7 +1,5 @@
 package com.payments_company.transactionsmanagement.dtos;
 
-import com.payments_company.transactionsmanagement.enums.UserType;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +29,8 @@ public class UserDto {
   private String password;
 
   @NotNull(message = "User type is required")
-  private UserType type;
+  @NotBlank(message = "User type is empty")
+  @Pattern(regexp = "(COMMON|SELLER)", message = "User type must be COMMON or SELLER")
+  private String type;
 
 }
