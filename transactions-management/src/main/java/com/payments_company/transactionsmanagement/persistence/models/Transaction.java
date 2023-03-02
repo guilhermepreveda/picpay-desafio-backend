@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.models;
+package com.payments_company.transactionsmanagement.persistence.models;
 
 import java.util.Date;
 

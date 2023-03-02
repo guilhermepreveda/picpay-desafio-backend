@@ -7,13 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.payments_company.transactionsmanagement.dtos.DepositDto;
-import com.payments_company.transactionsmanagement.dtos.UserDto;
-import com.payments_company.transactionsmanagement.enums.UserType;
-import com.payments_company.transactionsmanagement.exceptions.AppException;
-import com.payments_company.transactionsmanagement.models.User;
-import com.payments_company.transactionsmanagement.repositories.UserRepository;
+import com.payments_company.transactionsmanagement.persistence.enums.UserType;
+import com.payments_company.transactionsmanagement.persistence.models.User;
+import com.payments_company.transactionsmanagement.persistence.repositories.UserRepository;
 import com.payments_company.transactionsmanagement.services.UserServices;
+import com.payments_company.transactionsmanagement.web.dtos.DepositDto;
+import com.payments_company.transactionsmanagement.web.dtos.UserDto;
+import com.payments_company.transactionsmanagement.web.exceptions.AppException;
 
 @Service
 public class UserServicesImpl implements UserServices {

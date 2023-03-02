@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.dtos;
+package com.payments_company.transactionsmanagement.web.dtos;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;

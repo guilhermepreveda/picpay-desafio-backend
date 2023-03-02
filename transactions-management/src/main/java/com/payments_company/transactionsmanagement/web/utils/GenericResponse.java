@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.util;
+package com.payments_company.transactionsmanagement.web.utils;
 
 import java.util.List;
 import java.util.stream.Collectors;

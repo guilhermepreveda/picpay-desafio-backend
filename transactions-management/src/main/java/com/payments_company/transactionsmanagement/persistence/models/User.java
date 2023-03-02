@@ -1,8 +1,8 @@
-package com.payments_company.transactionsmanagement.models;
+package com.payments_company.transactionsmanagement.persistence.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
-import com.payments_company.transactionsmanagement.enums.UserType;
+import com.payments_company.transactionsmanagement.persistence.enums.UserType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

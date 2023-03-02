@@ -2,9 +2,9 @@ package com.payments_company.transactionsmanagement.services;
 
 import java.util.List;
 
-import com.payments_company.transactionsmanagement.dtos.DepositDto;
-import com.payments_company.transactionsmanagement.dtos.UserDto;
-import com.payments_company.transactionsmanagement.models.User;
+import com.payments_company.transactionsmanagement.persistence.models.User;
+import com.payments_company.transactionsmanagement.web.dtos.DepositDto;
+import com.payments_company.transactionsmanagement.web.dtos.UserDto;
 
 public interface UserServices {
 

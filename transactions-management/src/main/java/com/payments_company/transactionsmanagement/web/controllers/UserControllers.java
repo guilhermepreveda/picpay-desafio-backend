@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.controllers;
+package com.payments_company.transactionsmanagement.web.controllers;
 
 import java.util.List;
 
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.payments_company.transactionsmanagement.dtos.DepositDto;
-import com.payments_company.transactionsmanagement.dtos.UserDto;
-import com.payments_company.transactionsmanagement.models.User;
+import com.payments_company.transactionsmanagement.persistence.models.User;
 import com.payments_company.transactionsmanagement.services.impl.UserServicesImpl;
+import com.payments_company.transactionsmanagement.web.dtos.DepositDto;
+import com.payments_company.transactionsmanagement.web.dtos.UserDto;
 
 import jakarta.validation.Valid;
 

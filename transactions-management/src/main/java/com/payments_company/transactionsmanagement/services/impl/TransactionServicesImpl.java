@@ -5,15 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.payments_company.transactionsmanagement.dtos.MessageResponseDto;
-import com.payments_company.transactionsmanagement.dtos.TransactionDto;
-import com.payments_company.transactionsmanagement.enums.UserType;
-import com.payments_company.transactionsmanagement.exceptions.AppException;
-import com.payments_company.transactionsmanagement.models.Transaction;
-import com.payments_company.transactionsmanagement.models.User;
-import com.payments_company.transactionsmanagement.repositories.TransactionRepository;
-import com.payments_company.transactionsmanagement.repositories.UserRepository;
+import com.payments_company.transactionsmanagement.persistence.enums.UserType;
+import com.payments_company.transactionsmanagement.persistence.models.Transaction;
+import com.payments_company.transactionsmanagement.persistence.models.User;
+import com.payments_company.transactionsmanagement.persistence.repositories.TransactionRepository;
+import com.payments_company.transactionsmanagement.persistence.repositories.UserRepository;
 import com.payments_company.transactionsmanagement.services.TransactionServices;
+import com.payments_company.transactionsmanagement.web.dtos.MessageResponseDto;
+import com.payments_company.transactionsmanagement.web.dtos.TransactionDto;
+import com.payments_company.transactionsmanagement.web.exceptions.AppException;
 
 @Service
 public class TransactionServicesImpl implements TransactionServices {

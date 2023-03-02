@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.exceptions;
+package com.payments_company.transactionsmanagement.web.exceptions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.payments_company.transactionsmanagement.util.GenericResponse;
+import com.payments_company.transactionsmanagement.web.utils.GenericResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {

@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.exceptions;
+package com.payments_company.transactionsmanagement.web.exceptions;
 
 import org.springframework.http.HttpStatus;
 
