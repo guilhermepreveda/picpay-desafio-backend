@@ -1,19 +1,14 @@
 package com.payments_company.transactionsmanagement.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.payments_company.transactionsmanagement.dtos.MessageResponseDto;
 import com.payments_company.transactionsmanagement.dtos.TransactionDto;
 import com.payments_company.transactionsmanagement.enums.UserType;
-import com.payments_company.transactionsmanagement.exceptions.BalanceNotSufficientException;
-import com.payments_company.transactionsmanagement.exceptions.InvalidUserTypeException;
-import com.payments_company.transactionsmanagement.exceptions.PayeeNotFoundException;
-import com.payments_company.transactionsmanagement.exceptions.PayerNotFoundException;
-import com.payments_company.transactionsmanagement.exceptions.TransactionNotAuthorizedException;
-import com.payments_company.transactionsmanagement.exceptions.TransactionNotConfirmedException;
-import com.payments_company.transactionsmanagement.exceptions.TransactionNotFoundException;
+import com.payments_company.transactionsmanagement.exceptions.AppException;
 import com.payments_company.transactionsmanagement.models.Transaction;
 import com.payments_company.transactionsmanagement.models.User;
 import com.payments_company.transactionsmanagement.repositories.TransactionRepository;
@@ -34,17 +29,19 @@ public class TransactionServicesImpl implements TransactionServices {
     float value = transactionDto.getValue();
 
     Long payerId = transactionDto.getPayer();
-    User foundPayer = userRepository.findById(payerId).orElseThrow(() -> new PayerNotFoundException());
+    User foundPayer = userRepository.findById(payerId)
+        .orElseThrow(() -> new AppException("payerNotFound", HttpStatus.NOT_FOUND));
 
     Long payeeId = transactionDto.getPayee();
-    User foundPayee = userRepository.findById(payeeId).orElseThrow(() -> new PayeeNotFoundException());
+    User foundPayee = userRepository.findById(payeeId)
+        .orElseThrow(() -> new AppException("payeeNotFound", HttpStatus.NOT_FOUND));
 
     if (foundPayer.getType() == UserType.SELLER) {
-      throw new InvalidUserTypeException();
+      throw new AppException("invalidUserType", HttpStatus.FORBIDDEN);
     }
 
     if (foundPayer.getBalance() < value) {
-      throw new BalanceNotSufficientException();
+      throw new AppException("balanceNotSufficient", HttpStatus.FORBIDDEN);
     }
 
     RestTemplate restTemplate = new RestTemplate();
@@ -54,7 +51,7 @@ public class TransactionServicesImpl implements TransactionServices {
 
     if (transactionAuthorization == null
         || transactionAuthorization != null && !transactionAuthorization.getMessage().equals("Autorizado")) {
-      throw new TransactionNotAuthorizedException();
+      throw new AppException("transactionNotAuthorized", HttpStatus.UNAUTHORIZED);
     }
 
     float payerOldBalance = foundPayer.getBalance();
@@ -77,7 +74,8 @@ public class TransactionServicesImpl implements TransactionServices {
       foundPayer.setBalance(payerOldBalance + value);
       foundPayee.setBalance(payeeOldBalance - value);
 
-      throw new TransactionNotConfirmedException();
+      throw new AppException("transactionNotConfirmed", HttpStatus.FAILED_DEPENDENCY);
+
     }
 
     return transactionRepository.save(createdTransaction);
@@ -85,7 +83,8 @@ public class TransactionServicesImpl implements TransactionServices {
 
   @Override
   public Transaction retrieveTransaction(Long id) {
-    return transactionRepository.findById(id).orElseThrow(() -> new TransactionNotFoundException());
+    return transactionRepository.findById(id)
+        .orElseThrow(() -> new AppException("transactionNotFound", HttpStatus.NOT_FOUND));
   }
 
 }

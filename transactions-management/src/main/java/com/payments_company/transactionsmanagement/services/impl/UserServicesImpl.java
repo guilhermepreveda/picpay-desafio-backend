@@ -3,15 +3,14 @@ package com.payments_company.transactionsmanagement.services.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.payments_company.transactionsmanagement.dtos.DepositDto;
 import com.payments_company.transactionsmanagement.dtos.UserDto;
 import com.payments_company.transactionsmanagement.enums.UserType;
-import com.payments_company.transactionsmanagement.exceptions.CpfAlreadyInUseException;
-import com.payments_company.transactionsmanagement.exceptions.EmailAlreadyInUseException;
-import com.payments_company.transactionsmanagement.exceptions.UserNotFoundException;
+import com.payments_company.transactionsmanagement.exceptions.AppException;
 import com.payments_company.transactionsmanagement.models.User;
 import com.payments_company.transactionsmanagement.repositories.UserRepository;
 import com.payments_company.transactionsmanagement.services.UserServices;
@@ -28,14 +27,14 @@ public class UserServicesImpl implements UserServices {
   @Override
   public User createUser(UserDto userDto) {
 
-    boolean emailInUse = userRepository.findByEmail(userDto.getEmail()) != null;
-    if (emailInUse) {
-      throw new EmailAlreadyInUseException();
-    }
-
     boolean cpfInUse = userRepository.findByCpf(userDto.getCpf()) != null;
     if (cpfInUse) {
-      throw new CpfAlreadyInUseException();
+      throw new AppException("cpfAlreadyInUse", HttpStatus.CONFLICT);
+    }
+
+    boolean emailInUse = userRepository.findByEmail(userDto.getEmail()) != null;
+    if (emailInUse) {
+      throw new AppException("emailAlreadyInUse", HttpStatus.CONFLICT);
     }
 
     final User user = new User();
@@ -54,19 +53,20 @@ public class UserServicesImpl implements UserServices {
   @Override
   public User updateUser(Long id, UserDto userDto) {
 
-    User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+    User foundUser = userRepository.findById(id)
+        .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
 
     foundUser.setName(userDto.getName());
 
     boolean cpfInUse = userRepository.findByCpf(userDto.getCpf()) != null;
     if (cpfInUse) {
-      throw new CpfAlreadyInUseException();
+      throw new AppException("cpfAlreadyInUse", HttpStatus.CONFLICT);
     }
     foundUser.setCpf(userDto.getCpf());
 
     boolean emailInUse = userRepository.findByEmail(userDto.getEmail()) != null;
     if (emailInUse) {
-      throw new EmailAlreadyInUseException();
+      throw new AppException("emailAlreadyInUse", HttpStatus.CONFLICT);
     }
     foundUser.setEmail(userDto.getEmail());
 
@@ -79,7 +79,8 @@ public class UserServicesImpl implements UserServices {
 
   @Override
   public User createDeposit(Long id, DepositDto depositDto) {
-    User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+    User foundUser = userRepository.findById(id)
+        .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
 
     float userOldBalance = foundUser.getBalance();
 
@@ -96,12 +97,13 @@ public class UserServicesImpl implements UserServices {
   @Override
   public User retrieveUser(Long id) {
     return userRepository.findById(id)
-        .orElseThrow(() -> new UserNotFoundException());
+        .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
   }
 
   @Override
   public void deleteUser(Long id) {
-    User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+    User foundUser = userRepository.findById(id)
+        .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
 
     userRepository.delete(foundUser);
   }
