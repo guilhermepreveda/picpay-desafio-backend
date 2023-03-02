@@ -48,6 +48,7 @@ public class UserServicesImpl implements UserServices {
     user.setType(UserTypes.valueOf(userDto.getType()));
 
     return userRepository.save(user);
+
   }
 
   @Override
@@ -75,10 +76,12 @@ public class UserServicesImpl implements UserServices {
     foundUser.setType(UserTypes.valueOf(userDto.getType()));
 
     return userRepository.save(foundUser);
+
   }
 
   @Override
   public User createDeposit(final Long id, final DepositDto depositDto) {
+
     User foundUser = userRepository.findById(id)
         .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
 
@@ -87,25 +90,32 @@ public class UserServicesImpl implements UserServices {
     foundUser.setBalance(userOldBalance + depositDto.getValue());
 
     return userRepository.save(foundUser);
+
   }
 
   @Override
   public List<User> readAllUsers() {
+
     return userRepository.findAll();
+
   }
 
   @Override
   public User retrieveUser(final Long id) {
+
     return userRepository.findById(id)
         .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
+
   }
 
   @Override
   public void deleteUser(final Long id) {
+
     User foundUser = userRepository.findById(id)
         .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
 
     userRepository.delete(foundUser);
+
   }
 
 }

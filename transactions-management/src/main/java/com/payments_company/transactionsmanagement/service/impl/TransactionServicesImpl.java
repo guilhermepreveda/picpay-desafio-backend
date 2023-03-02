@@ -26,6 +26,7 @@ public class TransactionServicesImpl implements TransactionServices {
 
   @Override
   public Transaction createTransaction(final TransactionDto transactionDto) {
+
     float value = transactionDto.getValue();
 
     Long payerId = transactionDto.getPayer();
@@ -79,12 +80,15 @@ public class TransactionServicesImpl implements TransactionServices {
     }
 
     return transactionRepository.save(createdTransaction);
+
   }
 
   @Override
   public Transaction retrieveTransaction(final Long id) {
+
     return transactionRepository.findById(id)
         .orElseThrow(() -> new AppException("transactionNotFound", HttpStatus.NOT_FOUND));
+
   }
 
 }

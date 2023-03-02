@@ -22,7 +22,7 @@ public class GenericResponse {
     this.error = error;
   }
 
-  public GenericResponse(List<ObjectError> allErrors, String error) {
+  public GenericResponse(final List<ObjectError> allErrors, final String error) {
     this.error = error;
 
     String stringList = allErrors.stream().map(err -> {

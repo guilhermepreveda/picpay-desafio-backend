@@ -34,9 +34,11 @@ public class TransactionControllers {
 
   @GetMapping("/{id}")
   public ResponseEntity<Transaction> retrieveUser(@PathVariable("id") final Long id) {
+
     Transaction foundTransaction = transactionServices.retrieveTransaction(id);
 
     return new ResponseEntity<Transaction>(foundTransaction, HttpStatus.OK);
+
   }
 
 }

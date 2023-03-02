@@ -19,6 +19,7 @@ import com.payments_company.transactionsmanagement.util.GenericResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
   @Autowired
   private MessageSource messages;
 
@@ -27,8 +28,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @Override
-  protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatusCode status,
-      WebRequest request) {
+  protected ResponseEntity<Object> handleBindException(final BindException ex, final HttpHeaders headers,
+      final HttpStatusCode status, final WebRequest request) {
     final BindingResult result = ex.getBindingResult();
     final GenericResponse response = new GenericResponse(result.getAllErrors(),
         "Invalid" + StringUtils.capitalize(result.getObjectName()));
@@ -38,8 +39,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @Override
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
-      HttpStatusCode status, WebRequest request) {
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex,
+      final HttpHeaders headers, final HttpStatusCode status, final WebRequest request) {
     final BindingResult result = ex.getBindingResult();
     final GenericResponse response = new GenericResponse(result.getAllErrors(),
         "Invalid" + StringUtils.capitalize(result.getObjectName()));
