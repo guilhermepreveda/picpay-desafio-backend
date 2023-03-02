@@ -1,8 +1,7 @@
-package com.payments_company.transactionsmanagement.persistence.models;
+package com.payments_company.transactionsmanagement.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
-import com.payments_company.transactionsmanagement.persistence.enums.UserType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +39,7 @@ public class User {
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  private UserType type;
+  private UserTypes type;
 
   @Column(nullable = false)
   @JsonProperty(access = Access.READ_ONLY)

@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.spring;
+package com.payments_company.transactionsmanagement.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

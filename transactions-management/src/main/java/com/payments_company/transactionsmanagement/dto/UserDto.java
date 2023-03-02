@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.web.dtos;
+package com.payments_company.transactionsmanagement.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

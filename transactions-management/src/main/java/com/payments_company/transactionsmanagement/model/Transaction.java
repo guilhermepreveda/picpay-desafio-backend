@@ -1,8 +1,10 @@
-package com.payments_company.transactionsmanagement.persistence.models;
+package com.payments_company.transactionsmanagement.model;
 
 import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.payments_company.transactionsmanagement.model.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,19 +1,19 @@
-package com.payments_company.transactionsmanagement.services.impl;
+package com.payments_company.transactionsmanagement.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.payments_company.transactionsmanagement.persistence.enums.UserType;
-import com.payments_company.transactionsmanagement.persistence.models.Transaction;
-import com.payments_company.transactionsmanagement.persistence.models.User;
-import com.payments_company.transactionsmanagement.persistence.repositories.TransactionRepository;
-import com.payments_company.transactionsmanagement.persistence.repositories.UserRepository;
-import com.payments_company.transactionsmanagement.services.TransactionServices;
-import com.payments_company.transactionsmanagement.web.dtos.MessageResponseDto;
-import com.payments_company.transactionsmanagement.web.dtos.TransactionDto;
-import com.payments_company.transactionsmanagement.web.exceptions.AppException;
+import com.payments_company.transactionsmanagement.dto.MessageResponseDto;
+import com.payments_company.transactionsmanagement.dto.TransactionDto;
+import com.payments_company.transactionsmanagement.exception.AppException;
+import com.payments_company.transactionsmanagement.model.Transaction;
+import com.payments_company.transactionsmanagement.model.user.User;
+import com.payments_company.transactionsmanagement.model.user.UserTypes;
+import com.payments_company.transactionsmanagement.repository.TransactionRepository;
+import com.payments_company.transactionsmanagement.repository.UserRepository;
+import com.payments_company.transactionsmanagement.service.TransactionServices;
 
 @Service
 public class TransactionServicesImpl implements TransactionServices {
@@ -25,7 +25,7 @@ public class TransactionServicesImpl implements TransactionServices {
   private UserRepository userRepository;
 
   @Override
-  public Transaction createTransaction(TransactionDto transactionDto) {
+  public Transaction createTransaction(final TransactionDto transactionDto) {
     float value = transactionDto.getValue();
 
     Long payerId = transactionDto.getPayer();
@@ -36,7 +36,7 @@ public class TransactionServicesImpl implements TransactionServices {
     User foundPayee = userRepository.findById(payeeId)
         .orElseThrow(() -> new AppException("payeeNotFound", HttpStatus.NOT_FOUND));
 
-    if (foundPayer.getType() == UserType.SELLER) {
+    if (foundPayer.getType() == UserTypes.SELLER) {
       throw new AppException("invalidUserType", HttpStatus.FORBIDDEN);
     }
 
@@ -82,7 +82,7 @@ public class TransactionServicesImpl implements TransactionServices {
   }
 
   @Override
-  public Transaction retrieveTransaction(Long id) {
+  public Transaction retrieveTransaction(final Long id) {
     return transactionRepository.findById(id)
         .orElseThrow(() -> new AppException("transactionNotFound", HttpStatus.NOT_FOUND));
   }

@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.web.exceptions;
+package com.payments_company.transactionsmanagement.exception;
 
 import org.springframework.http.HttpStatus;
 
@@ -15,7 +15,7 @@ public class AppException extends RuntimeException {
     return statusCode;
   }
 
-  public void setStatusCode(HttpStatus statusCode) {
+  public void setStatusCode(final HttpStatus statusCode) {
     this.statusCode = statusCode;
   }
 

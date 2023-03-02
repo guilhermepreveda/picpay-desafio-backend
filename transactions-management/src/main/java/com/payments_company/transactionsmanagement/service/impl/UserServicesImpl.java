@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.services.impl;
+package com.payments_company.transactionsmanagement.service.impl;
 
 import java.util.List;
 
@@ -7,13 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.payments_company.transactionsmanagement.persistence.enums.UserType;
-import com.payments_company.transactionsmanagement.persistence.models.User;
-import com.payments_company.transactionsmanagement.persistence.repositories.UserRepository;
-import com.payments_company.transactionsmanagement.services.UserServices;
-import com.payments_company.transactionsmanagement.web.dtos.DepositDto;
-import com.payments_company.transactionsmanagement.web.dtos.UserDto;
-import com.payments_company.transactionsmanagement.web.exceptions.AppException;
+import com.payments_company.transactionsmanagement.dto.DepositDto;
+import com.payments_company.transactionsmanagement.dto.UserDto;
+import com.payments_company.transactionsmanagement.exception.AppException;
+import com.payments_company.transactionsmanagement.model.user.User;
+import com.payments_company.transactionsmanagement.model.user.UserTypes;
+import com.payments_company.transactionsmanagement.repository.UserRepository;
+import com.payments_company.transactionsmanagement.service.UserServices;
 
 @Service
 public class UserServicesImpl implements UserServices {
@@ -25,7 +25,7 @@ public class UserServicesImpl implements UserServices {
   private PasswordEncoder passwordEncoder;
 
   @Override
-  public User createUser(UserDto userDto) {
+  public User createUser(final UserDto userDto) {
 
     boolean cpfInUse = userRepository.findByCpf(userDto.getCpf()) != null;
     if (cpfInUse) {
@@ -45,13 +45,13 @@ public class UserServicesImpl implements UserServices {
 
     user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-    user.setType(UserType.valueOf(userDto.getType()));
+    user.setType(UserTypes.valueOf(userDto.getType()));
 
     return userRepository.save(user);
   }
 
   @Override
-  public User updateUser(Long id, UserDto userDto) {
+  public User updateUser(final Long id, final UserDto userDto) {
 
     User foundUser = userRepository.findById(id)
         .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
@@ -72,13 +72,13 @@ public class UserServicesImpl implements UserServices {
 
     foundUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-    foundUser.setType(UserType.valueOf(userDto.getType()));
+    foundUser.setType(UserTypes.valueOf(userDto.getType()));
 
     return userRepository.save(foundUser);
   }
 
   @Override
-  public User createDeposit(Long id, DepositDto depositDto) {
+  public User createDeposit(final Long id, final DepositDto depositDto) {
     User foundUser = userRepository.findById(id)
         .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
 
@@ -95,13 +95,13 @@ public class UserServicesImpl implements UserServices {
   }
 
   @Override
-  public User retrieveUser(Long id) {
+  public User retrieveUser(final Long id) {
     return userRepository.findById(id)
         .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
   }
 
   @Override
-  public void deleteUser(Long id) {
+  public void deleteUser(final Long id) {
     User foundUser = userRepository.findById(id)
         .orElseThrow(() -> new AppException("userNotFound", HttpStatus.NOT_FOUND));
 

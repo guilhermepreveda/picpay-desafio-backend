@@ -1,4 +1,4 @@
-package com.payments_company.transactionsmanagement.web.controllers;
+package com.payments_company.transactionsmanagement.controller;
 
 import java.util.List;
 
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.payments_company.transactionsmanagement.persistence.models.User;
-import com.payments_company.transactionsmanagement.services.impl.UserServicesImpl;
-import com.payments_company.transactionsmanagement.web.dtos.DepositDto;
-import com.payments_company.transactionsmanagement.web.dtos.UserDto;
+import com.payments_company.transactionsmanagement.dto.DepositDto;
+import com.payments_company.transactionsmanagement.dto.UserDto;
+import com.payments_company.transactionsmanagement.model.user.User;
+import com.payments_company.transactionsmanagement.service.impl.UserServicesImpl;
 
 import jakarta.validation.Valid;
 
@@ -29,7 +29,7 @@ public class UserControllers {
   UserServicesImpl userServices;
 
   @PostMapping
-  public ResponseEntity<User> createUser(@Valid @RequestBody UserDto userDto) {
+  public ResponseEntity<User> createUser(@Valid @RequestBody final UserDto userDto) {
 
     User createdUser = userServices.createUser(userDto);
 
@@ -37,16 +37,16 @@ public class UserControllers {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
-      @Valid @RequestBody UserDto userDto) {
+  public ResponseEntity<User> updateUser(@PathVariable("id") final Long id,
+      @Valid @RequestBody final UserDto userDto) {
     User updatedUser = userServices.updateUser(id, userDto);
 
     return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
   }
 
   @PostMapping("/{id}/deposit")
-  public ResponseEntity<User> createUser(@PathVariable("id") Long id,
-      @Valid @RequestBody DepositDto depositDto) {
+  public ResponseEntity<User> createUser(@PathVariable("id") final Long id,
+      @Valid @RequestBody final DepositDto depositDto) {
     User depositedUser = userServices.createDeposit(id, depositDto);
 
     return new ResponseEntity<User>(depositedUser, HttpStatus.OK);
@@ -60,14 +60,14 @@ public class UserControllers {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> retrieveUser(@PathVariable("id") Long id) {
+  public ResponseEntity<User> retrieveUser(@PathVariable("id") final Long id) {
     User foundUser = userServices.retrieveUser(id);
 
     return new ResponseEntity<User>(foundUser, HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+  public ResponseEntity<Void> deleteUser(@PathVariable("id") final Long id) {
     userServices.deleteUser(id);
 
     return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
